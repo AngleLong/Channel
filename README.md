@@ -153,4 +153,43 @@ Error:(24, 0) Could not get unknown property 'release' for SigningConfig contain
 ```
 在release中直接添加上面的代码就可以了
 
+####7. 实际开发中的一些设置
+- 变更打包过程中的一些字符串更改
+比如说有这样一个场景，在打包过程中我想要在小米应用市场叫小米，在华为应用市场叫华为这个就可以在相应懂的去到名称下面进行设置
+```
+    productFlavors {
+        xiaomi {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+            resValue "string", "app_name", "xiaomi_app"
+        }
+        wandoujia {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+            resValue "string", "app_name", "wandoujia_app"
+        }
+
+        /*简单的写法，类似于一个for循环*/
+        productFlavors.all {
+            flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+```
+这里注意一下逻辑，当你写resValue的时候是在相应的资源文件中添加这个字符串的，所以要把项目中的字符串注解掉，否则会报错的！切记！！！
+
+- 根据测试功能不同生成不同的包同事安装到手机上
+需求是什么样的呢？就是当你给测试提交包的时候，你想让他针对Okhttp进行测试，或者针对jPush进行测试的话，你可以给他打出两个包，针对于专项测试；
+```
+ /*下面这两个说明的是针对不同的是功能打出两个包，同时安装到手机中去*/
+        okhttp {
+            applicationIdSuffix "okhttp"
+            resValue "string", "app_name", "okhttp"
+        }
+
+        jpush {
+            applicationIdSuffix "jpush"
+            resValue "string", "app_name", "jpush"
+        }
+```
+其实applicationIdSuffix 就相当于在包名后面添加它后面的字段打出一个包，然后运行就可以了，专项测试！
+
+
 [Demo地址](https://github.com/AngleLong/Channel)
