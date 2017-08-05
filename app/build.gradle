@@ -31,15 +31,29 @@ android {
     productFlavors {
         xiaomi {
 //            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+            resValue "string", "app_name", "xiaomi_app"
         }
         wandoujia {
 //            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+            resValue "string", "app_name", "wandoujia_app"
+        }
+
+        /*下面这两个说明的是针对不同的是功能打出两个包，同时安装到手机中去*/
+        okhttp {
+            applicationIdSuffix "okhttp"
+            resValue "string", "app_name", "okhttp"
+        }
+
+        jpush {
+            applicationIdSuffix "jpush"
+            resValue "string", "app_name", "jpush"
         }
 
         /*简单的写法，类似于一个for循环*/
         productFlavors.all {
             flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
+
     }
 
     buildTypes {
